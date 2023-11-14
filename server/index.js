@@ -1,25 +1,29 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const { loadWallets } = require('./load-wallets')
+const { getAddressFromSignature, getPublicKeyFromSignature } = require('./helpers')
 const port = 3042;
 
 app.use(cors());
 app.use(express.json());
 
-const balances = {
-  "0x1": 100,
-  "0x2": 50,
-  "0x3": 75,
-};
+const balances = loadWallets()
+console.log(balances)
 
-app.get("/balance/:address", (req, res) => {
-  const { address } = req.params;
+app.get("/balance/:signature", (req, res) => {
+  const { signature: sig } = req.params;
+  const signature = getPublicKeyFromSignature(sig)
+  const address = getAddressFromSignature(signature)
   const balance = balances[address] || 0;
-  res.send({ balance });
+
+  res.send({ balance, address });
 });
 
 app.post("/send", (req, res) => {
-  const { sender, recipient, amount } = req.body;
+  const { signature: sig, recipient, amount } = req.body;
+  const signature = getPublicKeyFromSignature(sig)
+  const sender = getAddressFromSignature(signature)
 
   setInitialBalance(sender);
   setInitialBalance(recipient);

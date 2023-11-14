@@ -24,7 +24,9 @@ The server folder contains a node.js server using [express](https://expressjs.co
 
 1. Open a terminal within the `/server` folder 
 2. Run `npm install` to install all the depedencies 
-3. Run `node index` to start the server 
+3. Run `npm run generate` to generate your wallets (wallets.json)
+4. Run `npm run dev` to start the server 
+5. Run `npm run signature <private-key>` (get a private key from wallets.json) to generate an signature
 
 The application should connect to the default server port (3042) automatically! 
 
